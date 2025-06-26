@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import React from "react";
 import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,14 +19,52 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+// Expects a string of 11 digits.
+function validateCPF(cpf: string): boolean {
+  if (/^(\d)\1+$/.test(cpf)) {
+    return false;
+  }
+
+  let sum = 0;
+  let remainder: number;
+
+  for (let i = 1; i <= 9; i++) {
+    sum += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+  }
+  remainder = (sum * 10) % 11;
+  if (remainder === 10 || remainder === 11) {
+    remainder = 0;
+  }
+  if (remainder !== parseInt(cpf.substring(9, 10))) {
+    return false;
+  }
+
+  sum = 0;
+  for (let i = 1; i <= 10; i++) {
+    sum += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+  }
+  remainder = (sum * 10) % 11;
+  if (remainder === 10 || remainder === 11) {
+    remainder = 0;
+  }
+  if (remainder !== parseInt(cpf.substring(10, 11))) {
+    return false;
+  }
+  
+  return true;
+}
+
 const formSchema = z.object({
-  cpf: z.string()
-    .min(1, { message: "CPF é obrigatório." })
-    .transform(value => value.replace(/\D/g, ''))
-    .refine(value => value.length === 11, { message: "CPF deve conter 11 dígitos." })
+  cpf: z.preprocess(
+    (val) => String(val).replace(/\D/g, ''),
+    z.string()
+      .length(11, { message: "CPF deve ter 11 dígitos." })
+      .refine(validateCPF, { message: "CPF inválido." })
+  )
 });
 
 export function CpfForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,21 +73,8 @@ export function CpfForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    alert("CPF enviado");
-    form.reset();
+    router.push("/emprestimo");
   }
-
-  const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value;
-    
-    value = value.replace(/\D/g, ''); 
-    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-    value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-
-    form.setValue("cpf", value, { shouldValidate: true });
-  };
 
   return (
     <Card className="w-full max-w-sm shadow-lg border-none bg-card rounded-2xl">
@@ -70,7 +96,14 @@ export function CpfForm() {
                     <Input
                       placeholder="Digite seu CPF"
                       {...field}
-                      onChange={handleCpfChange}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        value = value.replace(/\D/g, ''); 
+                        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                        field.onChange(value);
+                      }}
                       className="h-12 text-lg"
                       maxLength={14}
                     />
