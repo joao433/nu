@@ -25,7 +25,7 @@ export function Header() {
           </Button>
         </div>
 
-        <div className="flex items-center gap-4 text-foreground md:hidden">
+        <div className="flex items-center gap-4 text-primary md:hidden">
           <Search className="h-5 w-5" />
           <Menu className="h-6 w-6" />
         </div>
