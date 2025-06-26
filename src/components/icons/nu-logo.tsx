@@ -3,13 +3,12 @@ export function NuLogo() {
     <svg
       aria-hidden="true"
       height="32"
-      viewBox="0 0 205 120"
+      viewBox="0 0 110 95"
       xmlns="http://www.w3.org/2000/svg"
       className="text-primary"
       fill="currentColor"
     >
-      <path d="M 30 100 C 30 0, 110 0, 110 100 L 90 100 C 90 20, 50 20, 50 100 Z" />
-      <path d="M 100 20 C 100 120, 180 120, 180 20 L 160 20 C 160 100, 120 100, 120 20 Z" />
+      <path d="M 5,95 V25 C 5,5 65,5 65,25 V70 C 65,95 105,95 105,70 V20 H85 V70 C 85,85 55,85 55,70 V25 C 55,15 25,15 25,25 V95 Z" />
     </svg>
   );
 }
