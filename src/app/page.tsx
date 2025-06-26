@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Header } from "@/components/layout/header";
 import { CpfForm } from "@/components/landing/cpf-form";
 import { Card } from "@/components/ui/card";
@@ -24,15 +23,16 @@ export default function Home() {
           <div className="grid items-start gap-12 md:grid-cols-2 lg:gap-16">
             <div className="flex items-center justify-center pt-0 md:pt-12">
               <Card className="w-full max-w-2xl overflow-hidden rounded-2xl shadow-lg border-none">
-                <Image
-                  src="https://placehold.co/600x400.png"
-                  alt="Casal em casa planejando suas finanças com um laptop"
-                  width={600}
-                  height={400}
-                  className="aspect-[3/2] w-full object-cover"
-                  data-ai-hint="couple planning"
-                  priority
-                />
+                <div className="aspect-video w-full">
+                  <iframe
+                    className="h-full w-full"
+                    src="https://www.youtube.com/embed/kJQP7kiw5Fk"
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
               </Card>
             </div>
 
