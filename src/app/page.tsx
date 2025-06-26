@@ -26,11 +26,11 @@ export default function Home() {
               <Card className="w-full max-w-2xl overflow-hidden rounded-2xl shadow-lg border-none">
                 <Image
                   src="https://placehold.co/600x400.png"
-                  alt="Couple looking at a paper with a notebook on the table"
+                  alt="Casal em casa planejando suas finanças com um laptop"
                   width={600}
                   height={400}
                   className="aspect-[3/2] w-full object-cover"
-                  data-ai-hint="couple laptop"
+                  data-ai-hint="couple planning"
                   priority
                 />
               </Card>
