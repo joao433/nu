@@ -25,12 +25,11 @@ export default function Home() {
               <Card className="w-full max-w-2xl overflow-hidden rounded-2xl shadow-lg border-none">
                 <div className="aspect-video w-full">
                   <iframe
-                    className="h-full w-full"
-                    src="https://www.youtube.com/embed/kJQP7kiw5Fk"
+                    className="pointer-events-none h-full w-full"
+                    src="https://www.youtube.com/embed/kJQP7kiw5Fk?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=kJQP7kiw5Fk"
                     title="YouTube video player"
                     frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
+                    allow="autoplay; encrypted-media"
                   ></iframe>
                 </div>
               </Card>
