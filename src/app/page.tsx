@@ -9,13 +9,13 @@ export default function Home() {
       <main className="flex-1">
         <section className="container mx-auto max-w-7xl px-4 py-16 md:py-24">
           <div className="mb-12 text-left">
-            <span className="text-lg font-semibold text-primary">
+            <span className="text-base font-semibold text-primary">
               Nubank
             </span>
-            <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            <h1 className="mt-2 text-4xl font-bold tracking-tight text-foreground">
               Empréstimos
             </h1>
-            <p className="mt-4 max-w-2xl text-lg text-muted-foreground md:text-xl">
+            <p className="mt-4 max-w-2xl text-base text-muted-foreground">
               Transparentes, seguros e do seu jeito.
             </p>
           </div>

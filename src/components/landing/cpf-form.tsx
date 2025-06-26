@@ -79,7 +79,7 @@ export function CpfForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full h-12 text-lg font-semibold">
+            <Button type="submit" className="w-full h-12">
               Continuar <ArrowRight className="h-5 w-5" />
             </Button>
           </form>
