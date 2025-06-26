@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import React from "react";
+import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -52,8 +53,8 @@ export function CpfForm() {
   return (
     <Card className="w-full max-w-sm shadow-lg border-none bg-background rounded-2xl">
       <CardHeader className="text-center">
-        <CardTitle className="text-xl font-bold">
-          Peça sua conta e cartão de crédito do Nubank
+        <CardTitle className="text-lg font-medium">
+          Abra sua Conta do Nubank
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -78,8 +79,8 @@ export function CpfForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full h-12 text-lg font-bold">
-              Continuar
+            <Button type="submit" className="w-full h-12 text-lg font-semibold">
+              Continuar <ArrowRight className="h-5 w-5" />
             </Button>
           </form>
         </Form>
