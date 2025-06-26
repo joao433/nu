@@ -54,7 +54,7 @@ export function CpfForm() {
     <Card className="w-full max-w-sm shadow-lg border-none bg-card rounded-2xl">
       <CardHeader className="text-center">
         <CardTitle className="text-lg font-medium">
-          Abra sua Conta do Nubank
+          Consultar empréstimo
         </CardTitle>
       </CardHeader>
       <CardContent>
