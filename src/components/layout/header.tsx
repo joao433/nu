@@ -26,15 +26,15 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
             <Search className="h-5 w-5" />
             <span className="sr-only">Pesquisar</span>
           </Button>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
             <User className="h-5 w-5" />
             <span className="sr-only">Minha conta</span>
           </Button>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
             <Menu className="h-6 w-6" />
             <span className="sr-only">Abrir menu</span>
           </Button>
