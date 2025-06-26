@@ -8,14 +8,14 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <section className="container mx-auto max-w-7xl px-4 py-16 md:py-24">
-          <div className="mb-12 text-center">
+          <div className="mb-12 text-left">
             <span className="text-lg font-semibold text-primary">
               Nubank
             </span>
             <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
               Empréstimos
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground md:text-xl">
+            <p className="mt-4 max-w-2xl text-lg text-muted-foreground md:text-xl">
               Transparentes, seguros e do seu jeito.
             </p>
           </div>
