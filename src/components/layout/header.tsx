@@ -35,28 +35,26 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
-              <nav className="grid gap-4 p-6 text-lg font-medium">
-                <Link href="/" className="mb-4 flex items-center gap-2 text-lg font-semibold">
-                  <NuLogo />
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Search className="h-5 w-5" />
-                  Pesquisar
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <User className="h-5 w-5" />
-                  Minha conta
-                </Link>
-                <div className="pt-4">
+              <div className="flex h-full flex-col">
+                <div className="p-6">
+                  <Link href="/" className="flex items-center gap-2 text-lg font-semibold">
+                    <NuLogo />
+                  </Link>
+                </div>
+                <nav className="grid gap-4 p-6 text-lg font-medium">
+                  <div className="flex items-center gap-3 text-muted-foreground">
+                    <Search className="h-5 w-5" />
+                    <span>Pesquisar</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-muted-foreground">
+                    <User className="h-5 w-5" />
+                    <span>Minha conta</span>
+                  </div>
+                </nav>
+                <div className="mt-auto p-6">
                   <Button className="w-full">Quero ser Nubank</Button>
                 </div>
-              </nav>
+              </div>
             </SheetContent>
           </Sheet>
         </div>
