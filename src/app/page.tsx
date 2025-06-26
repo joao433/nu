@@ -20,8 +20,8 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid items-start gap-12 md:grid-cols-2 lg:gap-16">
-            <div className="flex items-center justify-center pt-0 md:pt-12">
+          <div className="flex flex-col items-center gap-12">
+            <div className="flex items-center justify-center">
               <Card className="w-full max-w-2xl overflow-hidden rounded-2xl shadow-lg border-none">
                 <div className="aspect-video w-full">
                   <iframe
@@ -35,7 +35,7 @@ export default function Home() {
               </Card>
             </div>
 
-            <div className="flex items-center justify-center pt-0 md:pt-12">
+            <div className="flex items-center justify-center">
                <CpfForm />
             </div>
           </div>
