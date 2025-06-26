@@ -73,7 +73,7 @@ export function CpfForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    router.push("/emprestimo");
+    router.push("/emprestimo/simular");
   }
 
   return (
