@@ -1,22 +1,30 @@
+"use client";
+
+import { useSearchParams, useRouter } from "next/navigation";
 import { Header } from "@/components/layout/header";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
 
-export default function EmprestimoPage({ searchParams }: {
-  searchParams: {
-    amount?: string;
-    installments?: string;
-    monthlyPayment?: string;
-    paymentDay?: string;
-  }
-}) {
-  const amount = Number(searchParams?.amount || 10000);
-  const installments = Number(searchParams?.installments || 12);
-  const monthlyPayment = Number(searchParams?.monthlyPayment || 990.54);
-  const paymentDay = Number(searchParams?.paymentDay || 60);
+export default function EmprestimoPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const amount = Number(searchParams.get('amount') || 10000);
+  const installments = Number(searchParams.get('installments') || 12);
+  const monthlyPayment = Number(searchParams.get('monthlyPayment') || 990.54);
+  const paymentDay = Number(searchParams.get('paymentDay') || 60);
   
   const formatCurrency = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+
+  const handleHire = () => {
+    // Redirects to Nubank's contact page. In a real app, this could be a deep link to the chat.
+    window.location.href = 'https://nubank.com.br/contato/';
+  };
+
+  const handleSeeOtherOptions = () => {
+    router.back();
+  };
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
@@ -65,10 +73,10 @@ export default function EmprestimoPage({ searchParams }: {
                     <span className="font-bold text-lg">Em até {paymentDay} dias</span>
                   </div>
                 </div>
-                <Button className="w-full h-12 mt-8 text-lg">
+                <Button className="w-full h-12 mt-8 text-lg" onClick={handleHire}>
                   Contratar empréstimo
                 </Button>
-                <Button variant="ghost" className="w-full h-12 mt-2 text-lg text-primary">
+                <Button variant="ghost" className="w-full h-12 mt-2 text-lg text-primary" onClick={handleSeeOtherOptions}>
                   Ver outras opções
                 </Button>
               </CardContent>
