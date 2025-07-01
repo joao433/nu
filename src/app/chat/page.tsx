@@ -1,15 +1,16 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Send, ArrowLeft } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { chatWithLoanAssistant, ChatWithLoanAssistantInput } from '@/ai/flows/loan-assistant-flow';
 
 interface Message {
-  id: number;
+  id: string;
   text: string;
   sender: 'user' | 'bot';
 }
@@ -27,27 +28,53 @@ export default function ChatPage() {
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
-  const [step, setStep] = useState(0);
   const [isBotTyping, setIsBotTyping] = useState(false);
+  const [isChatFinished, setIsChatFinished] = useState(false);
 
-  const addBotMessageWithTyping = (text: string, delay: number, onComplete?: () => void) => {
-    setTimeout(() => {
-      setIsBotTyping(true);
-      setTimeout(() => {
-        addBotMessage(text);
-        setIsBotTyping(false);
-        if (onComplete) onComplete();
-      }, 1000 + Math.random() * 500); // Simulate typing
-    }, delay);
-  };
+  const getBotResponse = useCallback(async (currentMessages: Message[]) => {
+    setIsBotTyping(true);
+
+    const flowInput: ChatWithLoanAssistantInput = {
+      messages: currentMessages.map(msg => ({
+          role: msg.sender,
+          content: msg.text,
+      })),
+      amount: formatCurrency(amount),
+      installments: installments.toString(),
+      monthlyPayment: formatCurrency(monthlyPayment),
+    };
+
+    try {
+      const result = await chatWithLoanAssistant(flowInput);
+      const botResponse = result.response;
+      
+      setMessages(prev => [...prev, { id: crypto.randomUUID(), text: botResponse, sender: 'bot' }]);
+
+      if (botResponse.toLowerCase().includes('redirecionar')) {
+        setIsChatFinished(true);
+        setTimeout(() => router.back(), 3000);
+      }
+      if (botResponse.toLowerCase().includes('tudo certo!')) {
+        setIsChatFinished(true);
+      }
+
+    } catch (error) {
+      console.error("Error calling AI flow:", error);
+      setMessages(prev => [...prev, { id: crypto.randomUUID(), text: "Desculpe, estou com um problema no momento. Tente novamente mais tarde.", sender: 'bot' }]);
+    } finally {
+      setIsBotTyping(false);
+    }
+  }, [amount, installments, monthlyPayment, router]);
+
 
   useEffect(() => {
-    if (step === 0 && amount > 0) {
-      addBotMessageWithTyping(`Olá! Sou o assistente virtual do Nubank.`, 500);
-      addBotMessageWithTyping(`Vi que você tem interesse em um empréstimo no valor de ${formatCurrency(amount)} em ${installments}x de ${formatCurrency(monthlyPayment)}. Correto?`, 2000, () => setStep(1));
+    // Initial greeting from bot
+    if (messages.length === 0) {
+      getBotResponse([]);
     }
-  }, [step, amount, installments, monthlyPayment]);
-  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array is intentional to run only once.
+
   useEffect(() => {
     const viewport = scrollAreaRef.current?.querySelector('div[data-radix-scroll-area-viewport]');
     if (viewport) {
@@ -55,42 +82,17 @@ export default function ChatPage() {
     }
   }, [messages, isBotTyping]);
 
-  const addBotMessage = (text: string) => {
-    setMessages(prev => [...prev, { id: prev.length, text, sender: 'bot' }]);
-  };
 
-  const addUserMessage = (text: string) => {
-    setMessages(prev => [...prev, { id: prev.length, text, sender: 'user' }]);
-  };
-
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isBotTyping) return;
+    if (!input.trim() || isBotTyping || isChatFinished) return;
 
-    addUserMessage(input);
-    const userInput = input.toLowerCase();
+    const userMessage: Message = { id: crypto.randomUUID(), text: input, sender: 'user' };
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     setInput('');
-
-    if (step === 1) {
-      if (userInput.includes('sim') || userInput.includes('correto')) {
-        addBotMessageWithTyping(`Ótimo! Para confirmar a contratação, por favor, digite "confirmar empréstimo".`, 500, () => setStep(2));
-      } else {
-        addBotMessageWithTyping(`Entendi. Vou te redirecionar para a página de simulação para que você possa ajustar os valores.`, 500);
-        setTimeout(() => {
-          router.back();
-        }, 3000);
-      }
-    } else if (step === 2) {
-       if (userInput.includes('confirmar empréstimo')) {
-         addBotMessageWithTyping(`Perfeito! Processando sua solicitação...`, 500);
-         addBotMessageWithTyping(`Tudo certo! O valor de ${formatCurrency(amount)} será creditado na sua conta em alguns instantes.`, 2500);
-         addBotMessageWithTyping(`Obrigado por usar o Nubank! Se precisar de algo mais, é só chamar.`, 4000, () => setStep(3));
-       } else {
-         addBotMessageWithTyping(`Não entendi. Para prosseguir, por favor, digite "confirmar empréstimo". Se quiser alterar os valores, digite "voltar".`, 500);
-       }
-    } else {
-        addBotMessageWithTyping(`No momento, só consigo te ajudar com a contratação do empréstimo. Para outros assuntos, acesse nosso app ou site.`, 500);
-    }
+    
+    await getBotResponse(newMessages);
   };
 
   return (
@@ -163,10 +165,10 @@ export default function ChatPage() {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Digite sua mensagem..."
               autoComplete="off"
-              disabled={step === 3 || isBotTyping}
+              disabled={isChatFinished || isBotTyping}
               className="h-12 text-base"
             />
-            <Button type="submit" size="icon" disabled={step === 3 || isBotTyping} className="h-12 w-12 shrink-0">
+            <Button type="submit" size="icon" disabled={isChatFinished || isBotTyping} className="h-12 w-12 shrink-0">
               <Send className="h-6 w-6" />
             </Button>
           </form>
