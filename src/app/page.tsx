@@ -22,7 +22,7 @@ export default function Home() {
 
           <div className="flex flex-col items-center gap-12">
             <div className="flex items-center justify-center">
-              <Card className="w-full max-w-2xl overflow-hidden rounded-2xl shadow-lg border-none">
+              <Card className="w-full max-w-4xl overflow-hidden rounded-2xl shadow-lg border-none">
                 <div className="aspect-video w-full">
                   <iframe
                     className="h-full w-full"
