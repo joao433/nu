@@ -7,10 +7,13 @@ import React from "react";
 export default function Home() {
   return (
     <>
-      <Script src="https://fast.wistia.com/player.js" strategy="lazyOnload" />
+      <Script
+        src="https://fast.wistia.com/player.js"
+        strategy="afterInteractive"
+      />
       <Script
         src="https://fast.wistia.com/embed/44ord6sjrn.js"
-        strategy="lazyOnload"
+        strategy="afterInteractive"
         type="module"
       />
 
@@ -30,30 +33,28 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="flex flex-col items-center gap-12">
-              <div className="flex items-center justify-center">
-                <Card className="w-full max-w-5xl overflow-hidden rounded-2xl shadow-lg border-none">
-                  <div className="aspect-video w-full">
-                    <style>{`
+            <div className="flex justify-center mb-12">
+              <Card className="w-full max-w-5xl overflow-hidden rounded-2xl shadow-lg border-none">
+                <div className="aspect-video w-full">
+                  <style>{`
                       wistia-player[media-id='44ord6sjrn']:not(:defined) { 
                         background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/44ord6sjrn/swatch'); 
                         display: block; 
                         filter: blur(5px); 
                       }
                     `}</style>
-                    {React.createElement("wistia-player", {
-                      "media-id": "44ord6sjrn",
-                      "wistia-popover": "true",
-                      aspect: "0.5625",
-                      style: { width: "100%", height: "100%" },
-                    })}
-                  </div>
-                </Card>
-              </div>
+                  {React.createElement("wistia-player", {
+                    "media-id": "44ord6sjrn",
+                    "wistia-popover": "true",
+                    aspect: "0.5625",
+                    style: { width: "100%", height: "100%" },
+                  })}
+                </div>
+              </Card>
+            </div>
 
-              <div className="flex items-center justify-center">
-                <CpfForm />
-              </div>
+            <div className="flex items-center justify-center">
+              <CpfForm />
             </div>
           </section>
         </main>
