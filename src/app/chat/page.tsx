@@ -2,11 +2,10 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Header } from '@/components/layout/header';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Send } from 'lucide-react';
+import { Send, ArrowLeft } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface Message {
@@ -29,16 +28,23 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [step, setStep] = useState(0);
+  const [isBotTyping, setIsBotTyping] = useState(false);
+
+  const addBotMessageWithTyping = (text: string, delay: number, onComplete?: () => void) => {
+    setTimeout(() => {
+      setIsBotTyping(true);
+      setTimeout(() => {
+        addBotMessage(text);
+        setIsBotTyping(false);
+        if (onComplete) onComplete();
+      }, 1000 + Math.random() * 500); // Simulate typing
+    }, delay);
+  };
 
   useEffect(() => {
     if (step === 0 && amount > 0) {
-      setTimeout(() => {
-        addBotMessage(`Olá! Sou o assistente virtual do Nubank.`);
-      }, 500);
-      setTimeout(() => {
-        addBotMessage(`Vi que você tem interesse em um empréstimo no valor de ${formatCurrency(amount)} em ${installments}x de ${formatCurrency(monthlyPayment)}. Correto?`);
-        setStep(1);
-      }, 1500);
+      addBotMessageWithTyping(`Olá! Sou o assistente virtual do Nubank.`, 500);
+      addBotMessageWithTyping(`Vi que você tem interesse em um empréstimo no valor de ${formatCurrency(amount)} em ${installments}x de ${formatCurrency(monthlyPayment)}. Correto?`, 2000, () => setStep(1));
     }
   }, [step, amount, installments, monthlyPayment]);
   
@@ -47,8 +53,7 @@ export default function ChatPage() {
     if (viewport) {
       viewport.scrollTop = viewport.scrollHeight;
     }
-  }, [messages]);
-
+  }, [messages, isBotTyping]);
 
   const addBotMessage = (text: string) => {
     setMessages(prev => [...prev, { id: prev.length, text, sender: 'bot' }]);
@@ -60,7 +65,7 @@ export default function ChatPage() {
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || isBotTyping) return;
 
     addUserMessage(input);
     const userInput = input.toLowerCase();
@@ -68,100 +73,103 @@ export default function ChatPage() {
 
     if (step === 1) {
       if (userInput.includes('sim') || userInput.includes('correto')) {
-        setTimeout(() => {
-          addBotMessage(`Ótimo! Para confirmar a contratação, por favor, digite "confirmar empréstimo".`);
-          setStep(2);
-        }, 1000);
+        addBotMessageWithTyping(`Ótimo! Para confirmar a contratação, por favor, digite "confirmar empréstimo".`, 500, () => setStep(2));
       } else {
-        setTimeout(() => {
-          addBotMessage(`Entendi. Vou te redirecionar para a página de simulação para que você possa ajustar os valores.`);
-        }, 1000);
+        addBotMessageWithTyping(`Entendi. Vou te redirecionar para a página de simulação para que você possa ajustar os valores.`, 500);
         setTimeout(() => {
           router.back();
         }, 3000);
       }
     } else if (step === 2) {
        if (userInput.includes('confirmar empréstimo')) {
-         setTimeout(() => {
-            addBotMessage(`Perfeito! Processando sua solicitação...`);
-         }, 1000);
-         setTimeout(() => {
-            addBotMessage(`Tudo certo! O valor de ${formatCurrency(amount)} será creditado na sua conta em alguns instantes.`);
-         }, 3000);
-         setTimeout(() => {
-            addBotMessage(`Obrigado por usar o Nubank! Se precisar de algo mais, é só chamar.`);
-            setStep(3);
-         }, 4500);
+         addBotMessageWithTyping(`Perfeito! Processando sua solicitação...`, 500);
+         addBotMessageWithTyping(`Tudo certo! O valor de ${formatCurrency(amount)} será creditado na sua conta em alguns instantes.`, 2500);
+         addBotMessageWithTyping(`Obrigado por usar o Nubank! Se precisar de algo mais, é só chamar.`, 4000, () => setStep(3));
        } else {
-         setTimeout(() => {
-            addBotMessage(`Não entendi. Para prosseguir, por favor, digite "confirmar empréstimo". Se quiser alterar os valores, digite "voltar".`);
-         }, 1000);
+         addBotMessageWithTyping(`Não entendi. Para prosseguir, por favor, digite "confirmar empréstimo". Se quiser alterar os valores, digite "voltar".`, 500);
        }
     } else {
-         setTimeout(() => {
-            addBotMessage(`No momento, só consigo te ajudar com a contratação do empréstimo. Para outros assuntos, acesse nosso app ou site.`);
-         }, 1000);
+        addBotMessageWithTyping(`No momento, só consigo te ajudar com a contratação do empréstimo. Para outros assuntos, acesse nosso app ou site.`, 500);
     }
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-muted/40">
-      <Header />
-      <main className="flex flex-col flex-1 container mx-auto max-w-3xl w-full py-4 sm:py-6">
-        <div className="flex-1 flex flex-col bg-card border rounded-xl shadow-lg overflow-hidden">
-          <div className="p-4 border-b flex items-center gap-3 shrink-0">
-            <Avatar>
-              <AvatarImage src="https://placehold.co/40x40/820ad1/FFFFFF.png?text=N" data-ai-hint="logo" />
-              <AvatarFallback>NU</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="font-bold">Assistente Nubank</p>
-              <p className="text-xs text-muted-foreground">Online</p>
-            </div>
+    <div className="flex flex-col h-screen w-full bg-background">
+      <header className="p-4 border-b flex items-center gap-4 bg-card sticky top-0 z-10 shrink-0">
+        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => router.back()}>
+            <ArrowLeft className="h-5 w-5" />
+            <span className="sr-only">Voltar</span>
+        </Button>
+        <Avatar>
+          <AvatarImage src="https://placehold.co/40x40/820ad1/FFFFFF.png?text=N" data-ai-hint="logo" />
+          <AvatarFallback>NU</AvatarFallback>
+        </Avatar>
+        <div>
+          <p className="font-bold">Assistente Nubank</p>
+          <div className="flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-green-500"></span>
+            <p className="text-xs text-muted-foreground">Online</p>
           </div>
-          <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
-            <div className="space-y-6">
-              {messages.map((msg) => (
+        </div>
+      </header>
+      <main className="flex-1 flex flex-col overflow-hidden">
+        <ScrollArea className="flex-1" ref={scrollAreaRef}>
+          <div className="space-y-6 p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex items-end gap-3 w-full ${
+                  msg.sender === 'user' ? 'justify-end' : 'justify-start'
+                }`}
+              >
+                {msg.sender === 'bot' && (
+                  <Avatar className="h-8 w-8 self-start">
+                    <AvatarImage src="https://placehold.co/40x40/820ad1/FFFFFF.png?text=N" data-ai-hint="logo" />
+                    <AvatarFallback>NU</AvatarFallback>
+                  </Avatar>
+                )}
                 <div
-                  key={msg.id}
-                  className={`flex items-end gap-2 ${
-                    msg.sender === 'user' ? 'justify-end' : 'justify-start'
+                  className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm md:text-base leading-relaxed ${
+                    msg.sender === 'user'
+                      ? 'bg-primary text-primary-foreground rounded-br-lg'
+                      : 'bg-muted rounded-bl-lg'
                   }`}
                 >
-                  {msg.sender === 'bot' && (
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="https://placehold.co/40x40/820ad1/FFFFFF.png?text=N" data-ai-hint="logo" />
-                      <AvatarFallback>NU</AvatarFallback>
-                    </Avatar>
-                  )}
-                  <div
-                    className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm md:text-base ${
-                      msg.sender === 'user'
-                        ? 'bg-primary text-primary-foreground rounded-br-none'
-                        : 'bg-muted rounded-bl-none'
-                    }`}
-                  >
-                    <p>{msg.text}</p>
-                  </div>
+                  <p>{msg.text}</p>
                 </div>
-              ))}
-            </div>
-          </ScrollArea>
-          <div className="p-4 border-t bg-background shrink-0">
-            <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Digite sua mensagem..."
-                autoComplete="off"
-                disabled={step === 3}
-                className="h-11"
-              />
-              <Button type="submit" size="icon" disabled={step === 3} className="h-11 w-11 shrink-0">
-                <Send className="h-5 w-5" />
-              </Button>
-            </form>
+              </div>
+            ))}
+            {isBotTyping && (
+                <div className="flex items-end gap-3 w-full justify-start">
+                    <Avatar className="h-8 w-8 self-start">
+                        <AvatarImage src="https://placehold.co/40x40/820ad1/FFFFFF.png?text=N" data-ai-hint="logo" />
+                        <AvatarFallback>NU</AvatarFallback>
+                    </Avatar>
+                    <div className="max-w-[75%] rounded-2xl px-4 py-3 text-sm md:text-base bg-muted rounded-bl-lg">
+                        <div className="flex items-center justify-center gap-1.5 h-5">
+                            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground"></span>
+                            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:0.15s]"></span>
+                            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:0.3s]"></span>
+                        </div>
+                    </div>
+                </div>
+            )}
           </div>
+        </ScrollArea>
+        <div className="p-4 border-t bg-card shrink-0">
+          <form onSubmit={handleSendMessage} className="flex items-center gap-3 max-w-4xl mx-auto">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Digite sua mensagem..."
+              autoComplete="off"
+              disabled={step === 3 || isBotTyping}
+              className="h-12 text-base"
+            />
+            <Button type="submit" size="icon" disabled={step === 3 || isBotTyping} className="h-12 w-12 shrink-0">
+              <Send className="h-6 w-6" />
+            </Button>
+          </form>
         </div>
       </main>
     </div>
