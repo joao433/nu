@@ -73,13 +73,23 @@ export function CpfForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    router.push("/emprestimo/simular");
+    // This is a prototype, so we're using mock data here.
+    // In a real application, you would fetch this from a backend.
+    const userData = {
+      cpf: values.cpf,
+      nomeCompleto: "Maria Aparecida da Silva",
+      dataNascimento: "15/05/1985",
+      nomeMae: "Joana Pereira da Silva",
+    };
+
+    const queryParams = new URLSearchParams(userData);
+    router.push(`/emprestimo/simular?${queryParams.toString()}`);
   }
 
   return (
     <Card className="w-full max-w-sm shadow-lg border-none bg-card rounded-2xl">
       <CardHeader className="text-center">
-        <CardTitle className="text-lg font-medium">
+        <CardTitle className="text-lg font-bold">
           Consultar empréstimo
         </CardTitle>
       </CardHeader>
@@ -112,7 +122,7 @@ export function CpfForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full h-12">
+            <Button type="submit" className="w-full h-12 text-base font-bold">
               Continuar <ArrowRight className="h-5 w-5" />
             </Button>
           </form>

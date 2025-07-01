@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Header } from "@/components/layout/header";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,11 +10,25 @@ import { Label } from "@/components/ui/label";
 
 export default function SimularEmprestimoPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get user data from query params
+  const cpf = searchParams.get('cpf') || '';
+  const nomeCompleto = searchParams.get('nomeCompleto') || 'Não informado';
+  const dataNascimento = searchParams.get('dataNascimento') || 'Não informado';
+  const nomeMae = searchParams.get('nomeMae') || 'Não informado';
+
   const [amount, setAmount] = useState(2500);
   const [installments, setInstallments] = useState(12);
   const [paymentDay, setPaymentDay] = useState<number>(60);
 
   const interestRate = 0.039; // 3.9% a.m.
+
+  const formatCpf = (cpfStr: string) => {
+    if (!cpfStr) return 'Não informado';
+    // formats 12345678900 to 123.456.789-00
+    return cpfStr.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  };
 
   const calculateInstallment = () => {
     if (amount <= 0 || installments <= 0) {
@@ -64,19 +78,19 @@ export default function SimularEmprestimoPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                   <div>
                     <p className="text-sm text-muted-foreground">Nome completo</p>
-                    <p className="font-semibold text-foreground">Maria Aparecida da Silva</p>
+                    <p className="font-semibold text-foreground">{nomeCompleto}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">CPF</p>
-                    <p className="font-semibold text-foreground">123.456.789-00</p>
+                    <p className="font-semibold text-foreground">{formatCpf(cpf)}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Data de nascimento</p>
-                    <p className="font-semibold text-foreground">15/05/1985</p>
+                    <p className="font-semibold text-foreground">{dataNascimento}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Nome da mãe</p>
-                    <p className="font-semibold text-foreground">Joana Pereira da Silva</p>
+                    <p className="font-semibold text-foreground">{nomeMae}</p>
                   </div>
                 </div>
               </CardContent>
