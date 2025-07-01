@@ -12,6 +12,7 @@ export default function SimularEmprestimoPage() {
   const router = useRouter();
   const [amount, setAmount] = useState(2500);
   const [installments, setInstallments] = useState(12);
+  const [paymentDay, setPaymentDay] = useState<number>(60);
 
   const interestRate = 0.039; // 3.9% a.m.
 
@@ -103,6 +104,34 @@ export default function SimularEmprestimoPage() {
                      <div className="flex justify-between text-sm text-muted-foreground">
                         <span>3 meses</span>
                         <span>24 meses</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <Label className="text-base text-muted-foreground">Primeiro vencimento em?</Label>
+                    <div className="grid grid-cols-3 gap-2 md:gap-4">
+                      <Button
+                        variant={paymentDay === 30 ? "default" : "outline"}
+                        onClick={() => setPaymentDay(30)}
+                        className="h-12"
+                      >
+                        30 dias
+                      </Button>
+                      <Button
+                        variant={paymentDay === 60 ? "default" : "outline"}
+                        onClick={() => setPaymentDay(60)}
+                        className="h-12"
+                      >
+                        60 dias
+                      </Button>
+                      <Button
+                        variant={paymentDay === 120 ? "default" : "outline"}
+                        onClick={() => setPaymentDay(120)}
+                        className="h-12 flex-col p-1 leading-tight"
+                      >
+                        <span>120 dias</span>
+                        <span className="text-xs font-light opacity-80">(Sujeito a análise)</span>
+                      </Button>
                     </div>
                   </div>
                 </div>
