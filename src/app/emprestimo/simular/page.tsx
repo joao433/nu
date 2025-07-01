@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 
 export default function SimularEmprestimoPage() {
   const router = useRouter();
-  const [amount, setAmount] = useState(10000);
+  const [amount, setAmount] = useState(2500);
   const [installments, setInstallments] = useState(12);
 
   const interestRate = 0.039; // 3.9% a.m.
@@ -73,15 +73,15 @@ export default function SimularEmprestimoPage() {
                     </div>
                     <Slider
                       id="amount"
-                      min={1000}
-                      max={50000}
-                      step={500}
+                      min={500}
+                      max={5000}
+                      step={100}
                       value={[amount]}
                       onValueChange={(value) => setAmount(value[0])}
                     />
                      <div className="flex justify-between text-sm text-muted-foreground">
-                        <span>R$ 1.000</span>
-                        <span>R$ 50.000</span>
+                        <span>R$ 500</span>
+                        <span>R$ 5.000</span>
                     </div>
                   </div>
 
