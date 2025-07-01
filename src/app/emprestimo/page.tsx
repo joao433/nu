@@ -3,7 +3,21 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
 
-export default function EmprestimoPage() {
+export default function EmprestimoPage({ searchParams }: {
+  searchParams: {
+    amount?: string;
+    installments?: string;
+    monthlyPayment?: string;
+    paymentDay?: string;
+  }
+}) {
+  const amount = Number(searchParams?.amount || 10000);
+  const installments = Number(searchParams?.installments || 12);
+  const monthlyPayment = Number(searchParams?.monthlyPayment || 990.54);
+  const paymentDay = Number(searchParams?.paymentDay || 60);
+  
+  const formatCurrency = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <Header />
@@ -29,7 +43,7 @@ export default function EmprestimoPage() {
                     <CheckCircle className="h-8 w-8 text-primary" />
                   </div>
                   <div>
-                    <CardTitle className="text-2xl font-bold">Você tem R$ 10.000,00 disponíveis</CardTitle>
+                    <CardTitle className="text-2xl font-bold">Você tem {formatCurrency(amount)} disponíveis</CardTitle>
                     <CardDescription className="text-base text-muted-foreground mt-1">
                       Dinheiro na sua conta em instantes, sem burocracia.
                     </CardDescription>
@@ -40,7 +54,7 @@ export default function EmprestimoPage() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center border-b pb-4">
                     <span className="text-muted-foreground">Valor a ser pago</span>
-                    <span className="font-bold text-lg">12x de R$ 990,54</span>
+                    <span className="font-bold text-lg">{installments}x de {formatCurrency(monthlyPayment)}</span>
                   </div>
                    <div className="flex justify-between items-center border-b pb-4">
                     <span className="text-muted-foreground">Taxa de juros</span>
@@ -48,7 +62,7 @@ export default function EmprestimoPage() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-muted-foreground">Primeiro vencimento</span>
-                    <span className="font-bold text-lg">Em até 60 dias</span>
+                    <span className="font-bold text-lg">Em até {paymentDay} dias</span>
                   </div>
                 </div>
                 <Button className="w-full h-12 mt-8 text-lg">

@@ -49,7 +49,13 @@ export default function SimularEmprestimoPage() {
   const monthlyPayment = calculateInstallment();
 
   const handleContinue = () => {
-    router.push("/emprestimo");
+    const queryParams = new URLSearchParams({
+      amount: amount.toString(),
+      installments: installments.toString(),
+      monthlyPayment: monthlyPayment.toFixed(2),
+      paymentDay: paymentDay.toString(),
+    });
+    router.push(`/emprestimo?${queryParams.toString()}`);
   };
 
   return (
