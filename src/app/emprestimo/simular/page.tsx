@@ -125,12 +125,11 @@ export default function SimularEmprestimoPage() {
                         60 dias
                       </Button>
                       <Button
-                        variant={paymentDay === 120 ? "default" : "outline"}
-                        onClick={() => setPaymentDay(120)}
-                        className="h-16 flex-col p-1 leading-tight"
+                        variant={paymentDay === 90 ? "default" : "outline"}
+                        onClick={() => setPaymentDay(90)}
+                        className="h-16"
                       >
-                        <span>120 dias</span>
-                        <span className="text-xs font-light opacity-80">(Sujeito a análise)</span>
+                        90 dias
                       </Button>
                     </div>
                   </div>
