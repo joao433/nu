@@ -55,7 +55,33 @@ export default function SimularEmprestimoPage() {
             </p>
           </div>
           
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center gap-8">
+            <Card className="w-full max-w-2xl shadow-lg border-none bg-card rounded-2xl p-8">
+              <CardHeader className="p-0 mb-6">
+                <CardTitle className="text-xl font-bold">Seus dados</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Nome completo</p>
+                    <p className="font-semibold text-foreground">Maria Aparecida da Silva</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">CPF</p>
+                    <p className="font-semibold text-foreground">123.456.789-00</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Data de nascimento</p>
+                    <p className="font-semibold text-foreground">15/05/1985</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Nome da mãe</p>
+                    <p className="font-semibold text-foreground">Joana Pereira da Silva</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card className="w-full max-w-2xl shadow-lg border-none bg-card rounded-2xl p-8">
               <CardHeader className="p-0 mb-8">
                 <CardTitle className="text-2xl font-bold">Simulador de Empréstimo</CardTitle>
