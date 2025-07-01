@@ -105,64 +105,63 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-background">
+    <div className="flex flex-col h-screen w-full bg-muted/40">
       <Header />
-      <main className="flex-1 flex flex-col">
-        <div className="flex-1 container mx-auto max-w-2xl w-full py-8 flex flex-col">
-           <div className="bg-card border rounded-2xl flex flex-col h-[70vh] shadow-lg">
-                <div className="p-4 border-b flex items-center gap-4">
-                     <Avatar>
-                        <AvatarImage src="https://placehold.co/40x40/820ad1/FFFFFF.png?text=N" data-ai-hint="logo" />
-                        <AvatarFallback>NU</AvatarFallback>
+      <main className="flex flex-col flex-1 container mx-auto max-w-3xl w-full py-4 sm:py-6">
+        <div className="flex-1 flex flex-col bg-card border rounded-xl shadow-lg overflow-hidden">
+          <div className="p-4 border-b flex items-center gap-3 shrink-0">
+            <Avatar>
+              <AvatarImage src="https://placehold.co/40x40/820ad1/FFFFFF.png?text=N" data-ai-hint="logo" />
+              <AvatarFallback>NU</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="font-bold">Assistente Nubank</p>
+              <p className="text-xs text-muted-foreground">Online</p>
+            </div>
+          </div>
+          <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+            <div className="space-y-6">
+              {messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`flex items-end gap-2 ${
+                    msg.sender === 'user' ? 'justify-end' : 'justify-start'
+                  }`}
+                >
+                  {msg.sender === 'bot' && (
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src="https://placehold.co/40x40/820ad1/FFFFFF.png?text=N" data-ai-hint="logo" />
+                      <AvatarFallback>NU</AvatarFallback>
                     </Avatar>
-                    <div>
-                        <p className="font-bold">Assistente Nubank</p>
-                        <p className="text-xs text-muted-foreground">Online</p>
-                    </div>
+                  )}
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm md:text-base ${
+                      msg.sender === 'user'
+                        ? 'bg-primary text-primary-foreground rounded-br-none'
+                        : 'bg-muted rounded-bl-none'
+                    }`}
+                  >
+                    <p>{msg.text}</p>
+                  </div>
                 </div>
-                <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
-                    <div className="space-y-4">
-                        {messages.map((msg) => (
-                        <div
-                            key={msg.id}
-                            className={`flex items-end gap-2 ${
-                            msg.sender === 'user' ? 'justify-end' : 'justify-start'
-                            }`}
-                        >
-                             {msg.sender === 'bot' && (
-                                <Avatar className="h-8 w-8">
-                                    <AvatarImage src="https://placehold.co/40x40/820ad1/FFFFFF.png?text=N" data-ai-hint="logo" />
-                                    <AvatarFallback>NU</AvatarFallback>
-                                </Avatar>
-                            )}
-                            <div
-                            className={`max-w-xs md:max-w-md rounded-2xl px-4 py-2 ${
-                                msg.sender === 'user'
-                                ? 'bg-primary text-primary-foreground rounded-br-none'
-                                : 'bg-muted rounded-bl-none'
-                            }`}
-                            >
-                            <p className="text-sm">{msg.text}</p>
-                            </div>
-                        </div>
-                        ))}
-                    </div>
-                </ScrollArea>
-                <div className="p-4 border-t">
-                    <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-                        <Input
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            placeholder="Digite sua mensagem..."
-                            autoComplete="off"
-                            disabled={step === 3}
-                        />
-                        <Button type="submit" size="icon" disabled={step === 3}>
-                            <Send className="h-5 w-5" />
-                        </Button>
-                    </form>
-                </div>
-           </div>
+              ))}
+            </div>
+          </ScrollArea>
+          <div className="p-4 border-t bg-background shrink-0">
+            <form onSubmit={handleSendMessage} className="flex items-center gap-2">
+              <Input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Digite sua mensagem..."
+                autoComplete="off"
+                disabled={step === 3}
+                className="h-11"
+              />
+              <Button type="submit" size="icon" disabled={step === 3} className="h-11 w-11 shrink-0">
+                <Send className="h-5 w-5" />
+              </Button>
+            </form>
+          </div>
         </div>
       </main>
     </div>
