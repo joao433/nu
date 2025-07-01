@@ -18,8 +18,13 @@ export default function EmprestimoPage() {
   const formatCurrency = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
 
   const handleHire = () => {
-    // Redirects to Nubank's contact page. In a real app, this could be a deep link to the chat.
-    window.location.href = 'https://nubank.com.br/contato/';
+    // Redirects to the chat simulation page
+    const queryParams = new URLSearchParams({
+      amount: amount.toString(),
+      installments: installments.toString(),
+      monthlyPayment: monthlyPayment.toFixed(2),
+    });
+    router.push(`/chat?${queryParams.toString()}`);
   };
 
   const handleSeeOtherOptions = () => {
