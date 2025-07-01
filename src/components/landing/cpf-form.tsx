@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getUserDataByCpf } from "@/services/userService";
 
 // Expects a string of 11 digits.
 function validateCPF(cpf: string): boolean {
@@ -72,22 +73,19 @@ export function CpfForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // This is a prototype, so we're using mock data here.
-    // In a real application, you would fetch this from a backend.
-    const userData = {
-      cpf: values.cpf,
-      nomeCompleto: "Maria Aparecida da Silva",
-      dataNascimento: "15/05/1985",
-      nomeMae: "Joana Pereira da Silva",
-    };
-
-    const queryParams = new URLSearchParams(userData);
-    router.push(`/emprestimo/simular?${queryParams.toString()}`);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const userData = await getUserDataByCpf(values.cpf);
+      const queryParams = new URLSearchParams(userData);
+      router.push(`/emprestimo/simular?${queryParams.toString()}`);
+    } catch (error) {
+      console.error("Falha ao buscar dados do usuário:", error);
+      // Opcionalmente, mostrar um erro para o usuário
+    }
   }
 
   return (
-    <Card className="w-full max-w-sm shadow-lg border-none bg-card rounded-2xl">
+    <Card className="w-full max-w-sm overflow-hidden rounded-2xl border-none bg-card shadow-lg">
       <CardHeader className="text-center">
         <CardTitle className="text-lg font-bold">
           Consultar empréstimo
