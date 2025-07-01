@@ -22,11 +22,11 @@ export default function Home() {
 
           <div className="flex flex-col items-center gap-12">
             <div className="flex items-center justify-center">
-              <Card className="w-full max-w-4xl overflow-hidden rounded-2xl shadow-lg border-none">
+              <Card className="w-full max-w-5xl overflow-hidden rounded-2xl shadow-lg border-none">
                 <div className="aspect-video w-full">
                   <iframe
                     className="h-full w-full"
-                    src="https://www.youtube.com/embed/_LMIC2ZZ57A?autoplay=1&mute=1&controls=0&rel=0&loop=1&playlist=_LMIC2ZZ57A&modestbranding=1"
+                    src="https://www.youtube.com/embed/_LMIC2ZZ57A?autoplay=1&mute=0&controls=0&rel=0&loop=1&playlist=_LMIC2ZZ57A&modestbranding=1"
                     title="YouTube video player"
                     frameBorder="0"
                     allow="autoplay; encrypted-media"
