@@ -94,27 +94,27 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-background">
-      <header className="p-4 border-b flex items-center gap-4 bg-card sticky top-0 z-10 shrink-0">
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => router.back()}>
+    <div className="flex flex-col h-screen w-full bg-card">
+      <header className="p-4 border-b border-primary/50 flex items-center gap-4 bg-primary text-primary-foreground sticky top-0 z-10 shrink-0">
+        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/20" onClick={() => router.back()}>
             <ArrowLeft className="h-5 w-5" />
             <span className="sr-only">Voltar</span>
         </Button>
         <Avatar>
-          <AvatarImage src="https://placehold.co/40x40/820ad1/FFFFFF.png?text=N" data-ai-hint="logo" />
+          <AvatarImage src="https://placehold.co/40x40/FFFFFF/820ad1.png?text=N" data-ai-hint="logo" />
           <AvatarFallback>NU</AvatarFallback>
         </Avatar>
         <div>
           <p className="font-bold">Assistente Nubank</p>
           <div className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-green-500"></span>
-            <p className="text-xs text-muted-foreground">Online</p>
+            <p className="text-xs text-primary-foreground/80">Online</p>
           </div>
         </div>
       </header>
       <main className="flex-1 flex flex-col overflow-hidden">
         <ScrollArea className="flex-1" ref={scrollAreaRef}>
-          <div className="space-y-6 p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+          <div className="space-y-4 p-4 sm:p-6 lg:p-8 max-w-3xl mx-auto">
             {messages.map((msg) => (
               <div
                 key={msg.id}
@@ -124,15 +124,15 @@ export default function ChatPage() {
               >
                 {msg.sender === 'bot' && (
                   <Avatar className="h-8 w-8 self-start">
-                    <AvatarImage src="https://placehold.co/40x40/820ad1/FFFFFF.png?text=N" data-ai-hint="logo" />
+                    <AvatarImage src="https://placehold.co/40x40/FFFFFF/820ad1.png?text=N" data-ai-hint="logo" />
                     <AvatarFallback>NU</AvatarFallback>
                   </Avatar>
                 )}
                 <div
                   className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm md:text-base leading-relaxed ${
                     msg.sender === 'user'
-                      ? 'bg-primary text-primary-foreground rounded-br-lg'
-                      : 'bg-muted rounded-bl-lg'
+                      ? 'bg-muted rounded-br-lg'
+                      : 'bg-primary text-primary-foreground rounded-bl-lg'
                   }`}
                 >
                   <p>{msg.text}</p>
@@ -142,14 +142,14 @@ export default function ChatPage() {
             {isBotTyping && (
                 <div className="flex items-end gap-3 w-full justify-start">
                     <Avatar className="h-8 w-8 self-start">
-                        <AvatarImage src="https://placehold.co/40x40/820ad1/FFFFFF.png?text=N" data-ai-hint="logo" />
+                        <AvatarImage src="https://placehold.co/40x40/FFFFFF/820ad1.png?text=N" data-ai-hint="logo" />
                         <AvatarFallback>NU</AvatarFallback>
                     </Avatar>
-                    <div className="max-w-[75%] rounded-2xl px-4 py-3 text-sm md:text-base bg-muted rounded-bl-lg">
+                    <div className="max-w-[75%] rounded-2xl px-4 py-3 text-sm md:text-base bg-primary text-primary-foreground rounded-bl-lg">
                         <div className="flex items-center justify-center gap-1.5 h-5">
-                            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground"></span>
-                            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:0.15s]"></span>
-                            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:0.3s]"></span>
+                            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary-foreground/70"></span>
+                            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary-foreground/70 [animation-delay:0.15s]"></span>
+                            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary-foreground/70 [animation-delay:0.3s]"></span>
                         </div>
                     </div>
                 </div>
@@ -157,7 +157,7 @@ export default function ChatPage() {
           </div>
         </ScrollArea>
         <div className="p-4 border-t bg-card shrink-0">
-          <form onSubmit={handleSendMessage} className="flex items-center gap-3 max-w-4xl mx-auto">
+          <form onSubmit={handleSendMessage} className="flex items-center gap-3 max-w-3xl mx-auto">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
