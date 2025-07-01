@@ -127,7 +127,7 @@ export function ChatPopup({ isOpen, setIsOpen, amount, installments, monthlyPaym
         <ScrollArea className="flex-1" ref={scrollAreaRef}>
           <div className="space-y-4 p-4">
             {messages.map((msg) => (
-              <div key={msg.id}>
+              <div key={msg.id} className="animate-in fade-in slide-in-from-bottom-4 duration-300">
                 <div
                   className={`flex items-end gap-2 w-full ${
                     msg.sender === 'user' ? 'justify-end' : 'justify-start'
@@ -158,7 +158,7 @@ export function ChatPopup({ isOpen, setIsOpen, amount, installments, monthlyPaym
               </div>
             ))}
             {isBotTyping && (
-                <div className="flex items-end gap-2 w-full justify-start">
+                <div className="flex items-end gap-2 w-full justify-start animate-in fade-in slide-in-from-bottom-4 duration-300">
                     <Avatar className="h-8 w-8 self-start">
                         <AvatarImage src="https://placehold.co/40x40/FFFFFF/820ad1.png?text=N" data-ai-hint="logo" />
                         <AvatarFallback>NU</AvatarFallback>
